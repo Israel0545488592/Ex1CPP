@@ -37,49 +37,49 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
         case 'r':
 
-            while (iter % col < col - loop || iter == 0) {
+            for (int i = 0; (i < col - 2*loop) && count < col * row; i++) {
 
                 mat->start[iter] = ch;
                 iter++;
                 count++;
             }
-            iter--;
-            iter += row;
-            dir = 'd';
+            iter--;         //retret to the matrix'es bounds
+            iter += col;    //preper for next
+            dir = 'd';      //diraction
 
         case 'd':
 
-            while (iter < (col - loop) * (row - loop)) {
+            for (int i = 0; (i < row - 1 - 2*loop) && count < col * row; i++) {
 
                 mat->start[iter] = ch;
-                iter += row;
+                iter += col;
                 count++;
             }
-            iter -= row;
+            iter -= col;
             iter--;
             dir = 'l';
 
         case 'l':
 
-            while (iter % col < col - loop || iter == (col * row) - 1) {
+            for (int i = 0; (i < col - 1 - 2*loop) && count < row * col; i++) {
 
                 mat->start[iter] = ch;
                 iter--;
                 count++;
             }
             iter++;
-            iter -= row;
+            iter -= col;
             dir = 'u';
 
         case 'u':
 
-            while (iter > loop + row * loop) {
+            for (int i = 0; (i < row -2 - 2*loop) && count < col * row; i++) {
 
                 mat->start[iter] = ch;
-                iter -= row;
+                iter -= col;
                 count++;
             }
-            iter += row;
+            iter += col;
             iter++;
             dir = 'r';
 

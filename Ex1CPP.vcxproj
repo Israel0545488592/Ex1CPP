@@ -24,6 +24,7 @@
     <ClCompile Include="mat.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="TestCounter.cpp" />
+    <ClCompile Include="tmp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="doctest.h" />
