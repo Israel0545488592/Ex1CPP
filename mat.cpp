@@ -1,15 +1,21 @@
 #include "mat.hpp"
+#include <stdexcept>
 
 matrix* createMat(int col, int row) {
+
+    // invalid input
+    if (row < 1 || col < 1) { throw std::invalid_argument("dont play with me this is invalid"); }
+    if (row % 2 == 0 || col % 2 == 0) { throw std::invalid_argument("dont play with me this is invalid"); }
 
     if (row < 1 || col < 1) { return NULL; }
 
     matrix* mat = new matrix;
-    if (mat == nullptr){ return NULL;}
+    if (mat == nullptr) { return NULL; }
 
-    mat->col = col;
-    mat->row = row;
-    mat->start = new char[col * row];
+    mat -> col = col;
+    mat -> row = row;
+
+    mat -> start = new char[col * row];
     if (mat -> start == nullptr) { return NULL; }
 
     return mat;
@@ -27,34 +33,34 @@ void releseMat(matrix* mat) {
 void carpet(matrix* mat, char ch1, char ch2) {
 
     //setup
-    int iter = 0;   //iterator
-    int count = 0;  //counter
-    int loop = 0;   //indication in to how 'deep' we are in the matrix
-    int col = mat -> col;
-    int row = mat -> row;
-    char ch = ch1;  //wich charcter decorates current layer
+    int iter = 0;       //iterator
+    int count = 0;      //counter
+    int loop = 0;       //indication in to how 'deep' we are in the matrix
+    int col = mat->col;
+    int row = mat->row;
+    char ch = ch1;      //wich charcter decorates current layer
 
-    while (count < col * row) {                  
+    while (count < col * row) {
 
-        for (int i = 0; i < col - 2*loop; i++) {        //right
+        for (int i = 0; (i < col - 2 * loop) && (count < col * row); i++) {        //right
 
             mat->start[iter] = ch;
             iter++;
             count++;
         }
         iter--;         //retret to the matrix'es bounds
-        iter += col;
+        iter += col;    //get ready for next diraction
 
-        for (int i = 0; i < row - 1 - 2*loop; i++) {    //down
+        for (int i = 0; i < (row - 1 - 2 * loop) && (count < col * row); i++) {    //down
 
-            mat -> start[iter] = ch;
+            mat->start[iter] = ch;
             iter += col;
             count++;
         }
         iter -= col;
         iter--;
 
-        for (int i = 0; i < col - 1 - 2*loop; i++) {   //left
+        for (int i = 0; i < (col - 1 - 2 * loop) && (count < col * row); i++) {   //left
 
             mat -> start[iter] = ch;
             iter--;
@@ -63,9 +69,9 @@ void carpet(matrix* mat, char ch1, char ch2) {
         iter++;
         iter -= col;
 
-        for (int i = 0; i < row -2 - 2*loop; i++) {    //up
+        for (int i = 0; i < (row - 2 - 2 * loop) && (count < col * row); i++) {    //up
 
-            mat->start[iter] = ch;
+            mat -> start[iter] = ch;
             iter -= col;
             count++;
         }
@@ -79,18 +85,21 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
 string ariel::mat(int col, int row, char ch1, char ch2) {
 
-    string ans = "";
+    //invalid input, see mat.hpp
+    if ((ch1 < low || ch1 > high) || (ch2 < low || ch2 > high)) { throw std::invalid_argument("invalid charcter"); }
 
-    matrix* mat = createMat(col, row);
+    string ans;
 
-    if (mat == nullptr) { return ans; }
+    matrix* mat = createMat(col, row);  //alocating memory
 
-    carpet(mat, ch1, ch2);
+    if (mat == nullptr) { return ans; } 
 
-    for (int i = 0; i < mat->col; i++) {
-        for (int j = 0; j < mat->row; j++) {
+    carpet(mat, ch1, ch2);             //ading the data as required
 
-            ans += mat->start[i + (j * mat->col)];
+    for (int i = 0; i < row; i++) {    //constructing answere line ny line
+        for (int j = 0; j < col; j++) {
+
+            ans += mat -> start[j + (i * col)];
         }
         ans += '\n';
     }

@@ -22,4 +22,8 @@ void releseMat(matrix*); //free memory
 
 namespace ariel { string mat(int, int, char, char); } //output function
 
+//the ASCII interval of ligall input
+#define low 33
+#define high 126
+
 #endif
