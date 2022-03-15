@@ -1,7 +1,7 @@
 #include "mat.hpp"
 #include <stdexcept>
 
-matrix* createMat(int col, int row) {
+shared_ptr<matrix> createMat(int col, int row) {
 
     // invalid input
     if (row < 1 || col < 1) { throw std::invalid_argument("dont play with me this is invalid"); }
@@ -9,28 +9,21 @@ matrix* createMat(int col, int row) {
 
     if (row < 1 || col < 1) { return NULL; }
 
-    matrix* mat = new matrix;
-    if (mat == nullptr) { return NULL; }
+    //initiation
+    shared_ptr<matrix> mat = std::make_shared<matrix>();
 
     mat -> col = col;
     mat -> row = row;
 
-    mat -> start = new char[col * row];
-    if (mat -> start == nullptr) { return NULL; }
+    mat -> start1.resize(col*row);
 
     return mat;
-}
-
-void releseMat(matrix* mat) {
-
-    delete[](mat -> start);
-    delete mat;
 }
 
 
 //troversing the matrix in spiral fassion and ading the data as should
 
-void carpet(matrix* mat, char ch1, char ch2) {
+void carpet(shared_ptr<matrix>& mat, char ch1, char ch2) {
 
     //setup
     int iter = 0;       //iterator
@@ -44,7 +37,7 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
         for (int i = 0; (i < col - 2 * loop) && (count < col * row); i++) {        //right
 
-            mat->start[iter] = ch;
+            mat -> start1[iter] = ch;
             iter++;
             count++;
         }
@@ -53,7 +46,7 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
         for (int i = 0; i < (row - 1 - 2 * loop) && (count < col * row); i++) {    //down
 
-            mat->start[iter] = ch;
+            mat -> start1[iter] = ch;
             iter += col;
             count++;
         }
@@ -62,7 +55,7 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
         for (int i = 0; i < (col - 1 - 2 * loop) && (count < col * row); i++) {   //left
 
-            mat -> start[iter] = ch;
+            mat -> start1[iter] = ch;
             iter--;
             count++;
         }
@@ -71,7 +64,7 @@ void carpet(matrix* mat, char ch1, char ch2) {
 
         for (int i = 0; i < (row - 2 - 2 * loop) && (count < col * row); i++) {    //up
 
-            mat -> start[iter] = ch;
+            mat->start1[iter] = ch;
             iter -= col;
             count++;
         }
@@ -88,23 +81,20 @@ string ariel::mat(int col, int row, char ch1, char ch2) {
     //invalid input, see mat.hpp
     if ((ch1 < low || ch1 > high) || (ch2 < low || ch2 > high)) { throw std::invalid_argument("invalid charcter"); }
 
-    string ans;
+    string ans;  
 
-    matrix* mat = createMat(col, row);  //alocating memory
-
-    if (mat == nullptr) { return ans; } 
+    shared_ptr<matrix> mat = createMat(col, row);  //allocating memory, completely safe and efficent
+                                                  //imbeded memory management 
 
     carpet(mat, ch1, ch2);             //ading the data as required
 
     for (int i = 0; i < row; i++) {    //constructing answere line ny line
         for (int j = 0; j < col; j++) {
 
-            ans += mat -> start[j + (i * col)];
+            ans += mat -> start1[j + (i * col)];
         }
         ans += '\n';
     }
-
-    releseMat(mat);
 
     return ans;
 }

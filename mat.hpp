@@ -2,6 +2,8 @@
 #define _MAT_HPP_
 
 #include <string>
+#include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -10,15 +12,13 @@ typedef struct matrix {
     //size
     int row;
     int col;
-
-    char* start; //the actuall data
+    vector<char> start1{}; //the data structure
+    
 }matrix;
 
-matrix* createMat(int, int);
+shared_ptr<matrix> createMat(int, int);
 
-void carpet(matrix*, char, char); //to ad the info as required 
-
-void releseMat(matrix*); //free memory
+void carpet(shared_ptr<matrix>& mat, char, char); //to ad the info as required 
 
 namespace ariel { string mat(int, int, char, char); } //output function
 
